@@ -1,38 +1,39 @@
 import Layout from '../components/MyLayout';
 import { DragDropContext } from 'react-beautiful-dnd';
 
+// initiative: Math.floor(Math.random() * 20) + 1 + 5,
 const TEST_ENTITIES = [
     {
         name: "Rivulet",
-        initiative: Math.floor(Math.random() * 20) + 1 + 5,
+        initiative: 5 + 1 + 5,
     },
     {
         name: "Rimaru",
-        initiative: Math.floor(Math.random() * 20) + 1 + 4,
+        initiative: 10 + 1 + 4,
     },
     {
         name: "Gesh",
-        initiative: Math.floor(Math.random() * 20) + 1 + 3,
+        initiative: 15 + 1 + 3,
     },
     {
         name: "Skytree",
-        initiative: Math.floor(Math.random() * 20) + 1 + 2,
+        initiative: 20 + 1 + 2,
     },
     {
         name: "NPC 1",
-        initiative: Math.floor(Math.random() * 20) + 1,
+        initiative: 3 + 1,
     },
     {
         name: "NPC 2",
-        initiative: Math.floor(Math.random() * 20) + 1,
+        initiative: 8 + 1,
     },
     {
         name: "NPC 3",
-        initiative: Math.floor(Math.random() * 20) + 1,
+        initiative: 13 + 1,
     },
     {
         name: "NPC 4",
-        initiative: Math.floor(Math.random() * 20) + 1,
+        initiative: 17 + 1,
     }
 ];
 
@@ -140,8 +141,10 @@ class InitiativeTracker extends React.Component {
                 <div>
                     <table className="initiative-table">
                         <thead>
-                            <th>Name</th>
-                            <th>Initiative</th>
+                            <tr>
+                                <th>Name</th>
+                                <th>Initiative</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {items}
