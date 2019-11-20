@@ -1,5 +1,4 @@
 import Layout from '../components/MyLayout';
-import { DragDropContext } from 'react-beautiful-dnd';
 
 // initiative: Math.floor(Math.random() * 20) + 1 + 5,
 const TEST_ENTITIES = [
@@ -36,15 +35,6 @@ const TEST_ENTITIES = [
         initiative: 17 + 1,
     }
 ];
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-
-    return result;
-};
 
 class InitiativeTracker extends React.Component {
     constructor(props) {
@@ -108,23 +98,6 @@ class InitiativeTracker extends React.Component {
         var newOrder = this.state.entities;
         newOrder.unshift(newOrder.pop());
         this.setState({ entities: newOrder });
-    }
-
-    onDragEnd(result) {
-        // dropped outside the list
-        if (!result.destination) {
-            return;
-        }
-
-        const items = reorder(
-            this.state.items,
-            result.source.index,
-            result.destination.index
-        );
-
-        this.setState({
-            entities: items
-        });
     }
 
     render() {
