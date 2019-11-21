@@ -46,15 +46,20 @@ const TEST_ENTITIES = [
     }
 ];
 
-const SortableItem = SortableElement(({ id, initiative, text, first, removeEntity }) => <li className={"initiativeTable-item " + ((first) ? "initiativeTable-item--first" : "")}>
-    <span>{initiative}</span>
-    <span>{text}</span>
-    <button className="initiativeTable-itemControl" onClick={() => { console.log("test?"); removeEntity(id) }}>
+const SortableItem = SortableElement(({ id, initiative, text, first, events }) => <li className={"initiativeTable-item " + ((first) ? "initiativeTable-item--first" : "")}>
+    <span className="initiativeTable-inputWrapper">
+        <input className="initiativeTable-input initiativeTable-input--initiative" value={initiative} onChange={(e) => events.editEntityInitiative(e, id)} />
+    </span>
+    <span className="initiativeTable-inputWrapper">
+        <input className="initiativeTable-input initiativeTable-input--name" value={text} onChange={(e) => events.editEntityName(e, id)} />
+    </span>
+    <button className="initiativeTable-itemControl" onClick={() => (events.removeEntity(id))}>
         <span className="icono-crossCircle"></span>
     </button>
 </li>);
 
-const SortableList = SortableContainer(({ items, removeEntity }) => {
+const SortableList = SortableContainer(({ items, events }) => {
+    var first = items.find(x => x !== undefined);
     return (
         <div className="initiativeTable">
             <div className="initiativeTable-headers">
@@ -70,8 +75,8 @@ const SortableList = SortableContainer(({ items, removeEntity }) => {
                         id={entity.id}
                         initiative={entity.initiative}
                         text={entity.name}
-                        first={!index}
-                        removeEntity={removeEntity}
+                        first={entity.id == first.id}
+                        events={events}
                     />
                 ))}
             </ul>
@@ -193,11 +198,33 @@ class InitiativeTracker extends React.Component {
         this.setState({ entities: newState });
     }
 
+    editEntityName = (e, id) => {
+        var newState = this.state.entities;
+        newState.forEach((item, index) => {
+            if (id == item.id)
+                newState[index].name = e.target.value;
+        });
+        this.setState({ entities: newState });
+    }
+
+    editEntityInitiative = (e, id) => {
+        var newState = this.state.entities;
+        newState.forEach((item, index) => {
+            if (id == item.id)
+                newState[index].initiative = e.target.value;
+        });
+        this.setState({ entities: newState });
+    }
+
     render() {
         return (
             <div className="initiativeTracker">
                 <section className="initiativeTracker-list">
-                    <SortableList items={this.state.entities} onSortEnd={this.onSortEnd} removeEntity={this.removeEntity} />
+                    <SortableList items={this.state.entities} onSortEnd={this.onSortEnd} events={{
+                        removeEntity: this.removeEntity,
+                        editEntityName: this.editEntityName,
+                        editEntityInitiative: this.editEntityInitiative,
+                    }} />
                 </section>
                 <section className="initiativeTracker-controls">
                     <form>

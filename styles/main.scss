@@ -85,14 +85,14 @@ $item-transition-time: 200ms;
   position: relative;
   list-style: none;
   margin: 5px 0;
-  border: 1px solid lighten($color-dark, 50%);
+  border: 1px solid lighten($color-dark, 45%);
   padding: 0 60px 0 0;
   color: black;
   transition: color $item-transition-time, background-color $item-transition-time;
-  background-color: lighten($color-dark, 58%);
+  background-color: lighten($color-dark, 55%);
   cursor: grab;
   &:nth-child(even) {
-    background-color: lighten($color-dark, 65%);
+    background-color: lighten($color-dark, 60%);
   }
   > span:first-child {
     text-align: center;
@@ -104,7 +104,7 @@ $item-transition-time: 200ms;
   }
   > span {
     display: inline-block;
-    padding: 5px 10px;
+    padding: 5px 2.5px;
     vertical-align: middle;
   }
   .initiativeTable-itemControl {
@@ -161,4 +161,30 @@ $item-transition-time: 200ms;
       background-image: radial-gradient(lighten($color-purple, 45%) 50%, transparent 0);
     }
   }
+}
+
+.initiativeTable-input {
+  border: none;
+  font-size: 0.85rem;
+  border-bottom: 1px solid $color-dark;
+  position: relative;
+  &:after {
+    content: "E";
+    display: block;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+.initiativeTable-input--initiative {
+  width: 40px;
+  text-align: center;
+  padding: 5px 5px;
+}
+.initiativeTable-input--name {
+  width: 200px;
+  padding: 5px 10px;
 }
