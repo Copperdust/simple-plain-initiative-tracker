@@ -86,10 +86,10 @@ const SortableList = SortableContainer(({ items, events }) => {
 
 const sortByInitiative = arr => (
     arr.sort((x, y) => {
-        if (x.initiative < y.initiative) {
+        if (parseInt(x.initiative, 10) < parseInt(y.initiative, 10)) {
             return -1;
         }
-        if (x.initiative > y.initiative) {
+        if (parseInt(x.initiative, 10) > parseInt(y.initiative, 10)) {
             return 1;
         }
         return 0;
