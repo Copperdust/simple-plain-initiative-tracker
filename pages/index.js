@@ -1,4 +1,6 @@
 import Layout from '../components/MyLayout';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 
 // initiative: Math.floor(Math.random() * 20) + 1 + 5,
 const TEST_ENTITIES = [
@@ -36,6 +38,39 @@ const TEST_ENTITIES = [
     }
 ];
 
+const SortableItem = SortableElement(({ initiative, text }) => <li>
+    <span>{initiative}</span>
+    <span>{text}</span>
+</li>);
+
+const SortableList = SortableContainer(({ items }) => {
+    return (
+        <div className="initiativeTable">
+            <div className="initiativeTable-headers">
+                <span>Roll</span>
+                <span>Name</span>
+            </div>
+            <ul className="initiativeTable-items">
+                {items.map((entity, index) => (
+                    <SortableItem key={`item-${entity.name}`} index={index} initiative={entity.initiative} text={entity.name} />
+                ))}
+            </ul>
+        </div>
+    );
+});
+
+const sortByInitiative = arr => (
+    arr.sort((x, y) => {
+        if (x.initiative < y.initiative) {
+            return -1;
+        }
+        if (x.initiative > y.initiative) {
+            return 1;
+        }
+        return 0;
+    }).reverse()
+);
+
 class InitiativeTracker extends React.Component {
     constructor(props) {
         super(props);
@@ -43,6 +78,7 @@ class InitiativeTracker extends React.Component {
             nameInput: '',
             initiativeInput: '',
             entities: [],
+            // items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
         }
 
         this.addEntity = this.addEntity.bind(this);
@@ -50,9 +86,9 @@ class InitiativeTracker extends React.Component {
         this.handleInitiativeInputChange = this.handleInitiativeInputChange.bind(this);
         this.forward = this.forward.bind(this);
         this.backward = this.backward.bind(this);
-        this.onDragEnd = this.onDragEnd.bind(this);
+        this.sortEntities = this.sortEntities.bind(this);
 
-        this.state.entities = this.sortEntities(TEST_ENTITIES);
+        this.state.entities = sortByInitiative(TEST_ENTITIES);
     }
 
     handleNameInputChange = (e) => {
@@ -63,30 +99,21 @@ class InitiativeTracker extends React.Component {
         this.setState({ initiativeInput: e.target.value });
     }
 
-    addEntity = (e, sort) => {
-        e.preventDefault();
+    addEntity = (sort) => {
         var newState = {};
         newState.entities = this.state.entities.concat({
             name: this.state.nameInput,
             initiative: this.state.initiativeInput,
         });
         if (sort) {
-            newState.entities = this.sortEntities(newState.entities);
+            newState.entities = sortByInitiative(newState.entities);
         }
         this.setState(newState);
     }
 
-    sortEntities = arr => (
-        arr.sort((x, y) => {
-            if (x.initiative < y.initiative) {
-                return -1;
-            }
-            if (x.initiative > y.initiative) {
-                return 1;
-            }
-            return 0;
-        }).reverse()
-    )
+    sortEntities = () => (
+        this.setState({ entities: sortByInitiative(this.state.entities) })
+    );
 
     forward = () => {
         var newOrder = this.state.entities;
@@ -100,29 +127,17 @@ class InitiativeTracker extends React.Component {
         this.setState({ entities: newOrder });
     }
 
-    render() {
-        var first = true;
-        const items = this.state.entities.map((item, key) => (
-            <tr key={key}>
-                <td className="name">{item.name}</td>
-                <td className="initative">{item.initiative}</td>
-            </tr>
-        ));
+    onSortEnd = ({ oldIndex, newIndex }) => {
+        this.setState(({ entities }) => ({
+            entities: arrayMove(entities, oldIndex, newIndex),
+        }));
+    };
 
+    render() {
         return (
             <div>
                 <div>
-                    <table className="initiative-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Initiative</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {items}
-                        </tbody>
-                    </table>
+                    <SortableList items={this.state.entities} onSortEnd={this.onSortEnd} />
                 </div>
                 <div>
                     <button onClick={this.forward}>Advance</button>
@@ -130,14 +145,17 @@ class InitiativeTracker extends React.Component {
                 </div>
                 <form>
                     <label>
-                        Entity Name: <input value={this.state.nameInput} onChange={this.handleNameInputChange} />
+                        Name: <input value={this.state.nameInput} onChange={this.handleNameInputChange} />
                     </label>
                     <label>
-                        Entity Initiative: <input value={this.state.initiativeInput} onChange={this.handleInitiativeInputChange} />
+                        Roll: <input value={this.state.initiativeInput} onChange={this.handleInitiativeInputChange} />
                     </label>
-                    <button onClick={(e) => this.addEntity(e, true)}>Add and Sort</button>
-                    <button onClick={(e) => this.addEntity(e, false)}>Add</button>
                 </form>
+                <div>
+                    <button onClick={() => this.addEntity(false)}>Add</button>
+                    {/* <button onClick={() => this.addEntity(true)}>Add and Sort</button> */}
+                    <button onClick={this.sortEntities}>Sort</button>
+                </div>
             </div>
         );
     }
