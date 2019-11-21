@@ -1,4 +1,5 @@
 import Layout from '../components/MyLayout';
+import RollerForm from '../components/RollerForm';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
@@ -81,6 +82,7 @@ class InitiativeTracker extends React.Component {
         this.state = {
             nameInput: '',
             initiativeInput: '',
+            modifierInput: '',
             entities: [],
         }
 
@@ -91,6 +93,10 @@ class InitiativeTracker extends React.Component {
         this.backward = this.backward.bind(this);
         this.sortEntities = this.sortEntities.bind(this);
         this.removeEntity = this.removeEntity.bind(this);
+        this.clearInputs = this.clearInputs.bind(this);
+
+        // Load default values for inputs
+        setTimeout(() => (this.clearInputs()), 10);
     }
 
     handleNameInputChange = (e) => {
@@ -98,7 +104,37 @@ class InitiativeTracker extends React.Component {
     }
 
     handleInitiativeInputChange = (e) => {
-        this.setState({ initiativeInput: e.target.value });
+        var value = e.target.value;
+        if (Number.isInteger(parseInt(e.target.value, 10))) {
+            value = parseInt(e.target.value, 10);
+            if (parseInt(value, 10) > 999) value = 999;
+            if (parseInt(value, 10) < 1) value = 1;
+        }
+        this.setState({
+            initiativeInput: value,
+            modifierInput: '',
+        });
+    }
+
+    handleModifierInputChange = (e) => {
+        var value = e.target.value;
+        if (Number.isInteger(parseInt(e.target.value, 10))) {
+            value = parseInt(e.target.value, 10);
+            if (parseInt(value, 10) > 999) value = 999;
+            if (parseInt(value, 10) < -999) value = -999;
+        }
+        this.setState({
+            modifierInput: value,
+            initiativeInput: '',
+        });
+    }
+
+    clearInputs = () => {
+        var newState = {};
+        newState.nameInput = '';
+        newState.initiativeInput = '';
+        newState.modifierInput = '0';
+        this.setState(newState);
     }
 
     addEntity = (sort) => {
@@ -107,39 +143,28 @@ class InitiativeTracker extends React.Component {
         this.state.entities.forEach(item => {
             if (item.id >= highest) highest = item.id + 1;
         })
+
+        var initiative = this.state.initiativeInput;
+
+        if (initiative == '') {
+            initiative = Math.max(Math.floor(Math.random() * 20) + 1 + parseInt(this.state.modifierInput), 1);
+        }
+
         newState.entities = this.state.entities.concat({
             id: highest,
             name: this.state.nameInput,
-            initiative: this.state.initiativeInput,
+            initiative: initiative,
         });
-        newState.nameInput = '';
-        newState.initiativeInput = '';
         if (sort) {
             newState.entities = sortByInitiative(newState.entities);
         }
+
+        newState.nameInput = '';
         this.setState(newState);
     }
 
     sortEntities = () => {
         return this.setState({ entities: sortByInitiative(this.state.entities) })
-    };
-
-    forward = () => {
-        var newOrder = this.state.entities;
-        newOrder.push(newOrder.shift());
-        this.setState({ entities: newOrder });
-    }
-
-    backward = () => {
-        var newOrder = this.state.entities;
-        newOrder.unshift(newOrder.pop());
-        this.setState({ entities: newOrder });
-    }
-
-    onSortEnd = ({ oldIndex, newIndex }) => {
-        this.setState(({ entities }) => ({
-            entities: arrayMove(entities, oldIndex, newIndex),
-        }));
     };
 
     removeEntity = id => {
@@ -169,6 +194,24 @@ class InitiativeTracker extends React.Component {
         this.setState({ entities: newState });
     }
 
+    forward = () => {
+        var newOrder = this.state.entities;
+        newOrder.push(newOrder.shift());
+        this.setState({ entities: newOrder });
+    }
+
+    backward = () => {
+        var newOrder = this.state.entities;
+        newOrder.unshift(newOrder.pop());
+        this.setState({ entities: newOrder });
+    }
+
+    onSortEnd = ({ oldIndex, newIndex }) => {
+        this.setState(({ entities }) => ({
+            entities: arrayMove(entities, oldIndex, newIndex),
+        }));
+    };
+
     render() {
         return (
             <div className="initiativeTracker">
@@ -186,11 +229,11 @@ class InitiativeTracker extends React.Component {
                             value={this.state.nameInput}
                             onChange={this.handleNameInputChange}
                         />
-                        <FormTextInput
-                            label="Roll"
-                            value={this.state.initiativeInput}
-                            onChange={this.handleInitiativeInputChange}
-                            noMarginBottom
+                        <RollerForm
+                            initiative={this.state.initiativeInput}
+                            initiativeChange={this.handleInitiativeInputChange}
+                            modifier={this.state.modifierInput}
+                            modifierChange={this.handleModifierInputChange}
                         />
                     </form>
                     <StandardButton className="success" onClick={() => this.addEntity(false)}>Add</StandardButton>
