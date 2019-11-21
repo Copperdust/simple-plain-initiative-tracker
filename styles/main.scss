@@ -68,9 +68,17 @@ $first-column-width: 3.1rem;
 
 .initiativeTable-headers {
   font-weight: bold;
+  > span {
+    display: inline-block;
+    padding: 5px 2.5px;
+    box-sizing: border-box;
+  }
   > span:first-child {
     text-align: center;
     min-width: $first-column-width;
+  }
+  > span:last-child {
+    padding-left: 12.5px;
   }
 }
 
@@ -102,11 +110,6 @@ $item-transition-time: 200ms;
     min-width: 7.5rem;
     padding-right: 30px;
   }
-  > span {
-    display: inline-block;
-    padding: 5px 2.5px;
-    vertical-align: middle;
-  }
   .initiativeTable-itemControl {
     cursor: pointer;
     // margin: 5px;
@@ -124,7 +127,7 @@ $item-transition-time: 200ms;
     }
     > span {
       pointer-events: none;
-      zoom: 0.52;
+      zoom: 0.71;
     }
   }
   &:hover {
@@ -163,21 +166,17 @@ $item-transition-time: 200ms;
   }
 }
 
+.initiativeTable-inputWrapper {
+  display: inline-block;
+  padding: 5px 2.5px;
+  vertical-align: middle;
+}
 .initiativeTable-input {
   border: none;
   font-size: 0.85rem;
   border-bottom: 1px solid $color-dark;
+  height: 30px;
   position: relative;
-  &:after {
-    content: "E";
-    display: block;
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
 }
 .initiativeTable-input--initiative {
   width: 40px;
