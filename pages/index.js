@@ -147,7 +147,7 @@ class InitiativeTracker extends React.Component {
         var initiative = this.state.initiativeInput;
 
         if (initiative == '') {
-            initiative = Math.max(Math.floor(Math.random() * 20) + 1 + parseInt(this.state.modifierInput), 1);
+            initiative = Math.floor(Math.random() * 20) + 1 + parseInt(this.state.modifierInput);
         }
 
         newState.entities = this.state.entities.concat({
