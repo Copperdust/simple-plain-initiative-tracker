@@ -2,50 +2,6 @@ import Layout from '../components/MyLayout';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
-// initiative: Math.floor(Math.random() * 20) + 1 + 5,
-const TEST_ENTITIES = [
-    {
-        id: 1,
-        name: "Rivulet",
-        initiative: 5 + 1 + 5,
-    },
-    {
-        id: 2,
-        name: "Rimaru",
-        initiative: 10 + 1 + 4,
-    },
-    {
-        id: 3,
-        name: "Gesh",
-        initiative: 15 + 1 + 3,
-    },
-    {
-        id: 4,
-        name: "Skytree",
-        initiative: 20 + 1 + 2,
-    },
-    {
-        id: 5,
-        name: "NPC 1",
-        initiative: 3 + 1,
-    },
-    {
-        id: 6,
-        name: "NPC 2",
-        initiative: 8 + 1,
-    },
-    {
-        id: 7,
-        name: "NPC 3",
-        initiative: 13 + 1,
-    },
-    {
-        id: 8,
-        name: "NPC 4",
-        initiative: 17 + 1,
-    }
-];
-
 const SortableItem = SortableElement(({ id, initiative, text, first, events }) => <li className={"initiativeTable-item " + ((first) ? "initiativeTable-item--first" : "")}>
     <span className="initiativeTable-inputWrapper">
         <input className="initiativeTable-input initiativeTable-input--initiative" value={initiative} onChange={(e) => events.editEntityInitiative(e, id)} />
@@ -135,8 +91,6 @@ class InitiativeTracker extends React.Component {
         this.backward = this.backward.bind(this);
         this.sortEntities = this.sortEntities.bind(this);
         this.removeEntity = this.removeEntity.bind(this);
-
-        this.state.entities = sortByInitiative(TEST_ENTITIES);
     }
 
     handleNameInputChange = (e) => {
