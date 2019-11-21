@@ -6,13 +6,7 @@ const linkStyle = {
 
 const Header = () => (
     <header>
-        {/* <Link href="/">
-            <a style={linkStyle}>Home</a>
-        </Link>
-        <Link href="/about">
-            <a style={linkStyle}>About</a>
-        </Link> */}
-        <h1>Cu29 - Initiative Tracker</h1>
+        <h1>Simple Plain Initiative Tracker</h1>
     </header>
 );
 

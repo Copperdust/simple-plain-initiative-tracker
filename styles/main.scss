@@ -21,16 +21,17 @@ hr {
   border-top: 2px solid $color-dark;
 }
 
-header {
-  h1 {
-    font-size: 32px;
-    font-weight: bold;
-  }
+h1 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 32px;
+  font-weight: bold;
 }
 
 .initiativeTracker {
   display: flex;
   flex-wrap: wrap;
+  margin: -10px;
 }
 
 .initiativeTracker-list,
