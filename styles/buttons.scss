@@ -1,0 +1,32 @@
+button {
+  outline: none;
+}
+
+.standardButton {
+  background-color: $color-purple;
+  border: none;
+  padding: 10px;
+  display: block;
+  width: 100%;
+  color: $color-light;
+  font-size: 1rem;
+  transition: background-color 100ms;
+  &:hover,
+  &:active {
+    background-color: darken($color-purple, 10%);
+  }
+  &.success {
+    background-color: $color-green;
+    &:hover,
+    &:active {
+      background-color: darken($color-green, 10%);
+    }
+  }
+  &.failure {
+    background-color: $color-red;
+    &:hover,
+    &:active {
+      background-color: darken($color-red, 10%);
+    }
+  }
+}

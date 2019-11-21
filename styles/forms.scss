@@ -1,0 +1,19 @@
+.standardInputGroup {
+  display: block;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  input {
+    display: block;
+    width: 100%;
+    border-style: none;
+    padding: 10px;
+    font-size: 1rem;
+  }
+  &.noMarginBottom {
+    margin-bottom: 0;
+  }
+}
