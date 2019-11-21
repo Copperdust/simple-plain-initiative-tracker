@@ -1,7 +1,4 @@
 import Header from './Header';
-import Head from 'next/head'
-import "../node_modules/reset-css/sass/_reset.scss"
-import "../node_modules/icono/sass/icono.scss"
 import "../styles/main.scss"
 
 const layoutStyle = {

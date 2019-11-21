@@ -5,6 +5,9 @@ $color-light: #fff4ec;
 $color-medium: #f3e0cc;
 $color-dark: #5a5353;
 
+@import "vendor/icono/icono";
+@import "vendor/reset/reset";
+
 @import "buttons";
 @import "forms";
 
