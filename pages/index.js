@@ -76,6 +76,41 @@ class FormTextInput extends React.Component {
     }
 }
 
+class InitiativeList extends React.Component {
+    render() {
+        const { items, onSortEnd, events } = this.props;
+        return <section className="initiativeTracker-list">
+            <SortableList items={items} onSortEnd={onSortEnd} events={events} />
+        </section>
+    }
+}
+
+class InitiativeSidebar extends React.Component {
+    render() {
+        const { name, nameChange, initiative, initiativeChange, modifier, modifierChange, addEntity, sortEntities, forward, backward } = this.props;
+        return <section className="initiativeTracker-controls">
+            <form>
+                <FormTextInput
+                    label="Name"
+                    value={name}
+                    onChange={nameChange}
+                />
+                <RollerForm
+                    initiative={initiative}
+                    initiativeChange={initiativeChange}
+                    modifier={modifier}
+                    modifierChange={modifierChange}
+                />
+            </form>
+            <StandardButton className="success" onClick={() => addEntity(false)}>Add</StandardButton>
+            <StandardButton onClick={sortEntities}>Sort</StandardButton>
+            <hr />
+            <StandardButton className="failure" onClick={backward}>Go Back</StandardButton>
+            <StandardButton className="success" onClick={forward}>Advance</StandardButton>
+        </section>
+    }
+}
+
 class InitiativeTracker extends React.Component {
     constructor(props) {
         super(props);
@@ -215,33 +250,27 @@ class InitiativeTracker extends React.Component {
     render() {
         return (
             <div className="initiativeTracker">
-                <section className="initiativeTracker-list">
-                    <SortableList items={this.state.entities} onSortEnd={this.onSortEnd} events={{
+                <InitiativeList
+                    items={this.state.entities}
+                    onSortEnd={this.onSortEnd}
+                    events={{
                         removeEntity: this.removeEntity,
                         editEntityName: this.editEntityName,
                         editEntityInitiative: this.editEntityInitiative,
-                    }} />
-                </section>
-                <section className="initiativeTracker-controls">
-                    <form>
-                        <FormTextInput
-                            label="Name"
-                            value={this.state.nameInput}
-                            onChange={this.handleNameInputChange}
-                        />
-                        <RollerForm
-                            initiative={this.state.initiativeInput}
-                            initiativeChange={this.handleInitiativeInputChange}
-                            modifier={this.state.modifierInput}
-                            modifierChange={this.handleModifierInputChange}
-                        />
-                    </form>
-                    <StandardButton className="success" onClick={() => this.addEntity(false)}>Add</StandardButton>
-                    <StandardButton onClick={this.sortEntities}>Sort</StandardButton>
-                    <hr />
-                    <StandardButton className="failure" onClick={this.backward}>Go Back</StandardButton>
-                    <StandardButton className="success" onClick={this.forward}>Advance</StandardButton>
-                </section>
+                    }}
+                ></InitiativeList>
+                <InitiativeSidebar
+                    name={this.state.nameInput}
+                    nameChange={this.handleNameInputChange}
+                    initiative={this.state.initiativeInput}
+                    initiativeChange={this.handleInitiativeInputChange}
+                    modifier={this.state.modifierInput}
+                    modifierChange={this.handleModifierInputChange}
+                    addEntity={this.addEntity}
+                    sortEntities={this.sortEntities}
+                    forward={this.forward}
+                    backward={this.backward}
+                ></InitiativeSidebar>
             </div>
         );
     }
