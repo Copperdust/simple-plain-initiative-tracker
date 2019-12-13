@@ -1,4 +1,4 @@
-import Layout from '../components/MyLayout';
+import Layout from '../components/Layout';
 import RollerForm from '../components/RollerForm';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
